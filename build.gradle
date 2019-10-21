@@ -4,11 +4,11 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.2'
-        
+        classpath 'com.novoda:bintray-release:0.9'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -18,10 +18,16 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven {
+            url 'https://bintray.com/itsdf07/maven/'
+        }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+// 指定javadoc UTF-8格式
+task javadoc(type: Javadoc) {
+    options.encoding = "utf-8"
 }
