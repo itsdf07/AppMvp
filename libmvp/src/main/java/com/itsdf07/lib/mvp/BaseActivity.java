@@ -13,14 +13,24 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     public String TAG = this.getClass().getSimpleName();
+    /**
+     * 是否打印框架Log:true-打印;false-不打印
+     */
+    public boolean isBaseActivityLog = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (this.getLayoutId() > 0) {
-            setContentView(this.getLayoutId());
+        if (LibMvpConfig.isShowLibMvpLog) {
+            Log.i(TAG, "onCreate->...");
+        }
+        int resLayoutId = this.getLayoutId();
+        if (resLayoutId > 0) {
+            setContentView(resLayoutId);
         } else {
-            Log.w(TAG, "请在getLayoutId中设置您的UI布局");
+            if (LibMvpConfig.isShowLibMvpLog) {
+                Log.w(TAG, "onCreate->请在getLayoutId中设置您的UI布局");
+            }
         }
         onBeforeView();
         onInitView();
@@ -47,7 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     /**
-     * 初始化之后UI控件要做的事情
+     * 初始化UI控件之后要做的事情
      */
     public abstract void onAfterView();
 
