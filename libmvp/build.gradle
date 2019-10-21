@@ -38,7 +38,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
-
+//    gradlew clean build bintrayUpload -PbintrayUser=itsdf07 -PbintrayKey=APIKEY -PdryRun=false
+//    APIKEY请上bintray平台查看
+//    https://bintray.com/itsdf07/maven
 publish {
     userOrg = 'itsdf07'//bintray.com用户名
     groupId = 'com.itsdf07'//jcenter上的路径
