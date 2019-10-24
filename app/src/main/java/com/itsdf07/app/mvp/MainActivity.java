@@ -3,8 +3,10 @@ package com.itsdf07.app.mvp;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
 
 import com.itsdf07.lib.mvp.BaseMvpActivity;
+import com.tencent.bugly.crashreport.CrashReport;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainContracts.IMainView {
 
@@ -22,6 +24,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void onInitView() {
         Log.d(TAG, "onInitView->");
+        findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CrashReport.testJavaCrash();
+            }
+        });
     }
 
     @Override
