@@ -22,7 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (LibMvpConfig.isShowLibMvpLog) {
-            Log.i(TAG, "onCreate->...");
+            Log.v(TAG, "onCreate->...");
         }
         int resLayoutId = this.getLayoutId();
         if (resLayoutId > 0) {

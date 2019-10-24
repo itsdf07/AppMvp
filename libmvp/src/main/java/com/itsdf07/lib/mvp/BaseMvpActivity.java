@@ -29,7 +29,7 @@ public abstract class BaseMvpActivity<P extends IBaseMvpPresenter> extends BaseA
     @Override
     protected void onDestroy() {
         if (LibMvpConfig.isShowLibMvpLog) {
-            Log.i(TAG, "onDestroy->");
+            Log.v(TAG, "onDestroy->");
         }
         /**
          * 在生命周期结束时，将presenter与view之间的联系断开，防止出现内存泄露
@@ -54,14 +54,14 @@ public abstract class BaseMvpActivity<P extends IBaseMvpPresenter> extends BaseA
     @Override
     public void showLoading() {
         if (LibMvpConfig.isShowLibMvpLog) {
-            Log.i(TAG, "showLoading->...");
+            Log.v(TAG, "showLoading->...");
         }
     }
 
     @Override
     public void showLoading(String content) {
         if (LibMvpConfig.isShowLibMvpLog) {
-            Log.i(TAG, "showLoading->content:" + content);
+            Log.v(TAG, "showLoading->content:" + content);
         }
         if (null == content) {
             Log.w(TAG, "showLoading->content的显示内容为null，将为您显示默认内容...");
@@ -73,14 +73,14 @@ public abstract class BaseMvpActivity<P extends IBaseMvpPresenter> extends BaseA
     @Override
     public void hideLoading() {
         if (LibMvpConfig.isShowLibMvpLog) {
-            Log.i(TAG, "hideLoading->...");
+            Log.v(TAG, "hideLoading->...");
         }
     }
 
     @Override
     public void showToast(String content) {
         if (LibMvpConfig.isShowLibMvpLog) {
-            Log.i(TAG, "showToast->content:" + content);
+            Log.v(TAG, "showToast->content:" + content);
         }
         if (null == content) {
             Log.w(TAG, "showToast->content的显示内容为null，将主动为您置为\"\"");

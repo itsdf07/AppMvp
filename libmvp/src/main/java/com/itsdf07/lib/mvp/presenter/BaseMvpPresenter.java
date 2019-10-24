@@ -28,7 +28,7 @@ public class BaseMvpPresenter<V extends IBaseMvpView> implements IBaseMvpPresent
     @Override
     public void detachView() {
         if (LibMvpConfig.isShowLibMvpLog) {
-            Log.i(TAG, "detachView->view:" + view);
+            Log.v(TAG, "detachView->view:" + view);
         }
 
         if (view != null) {
@@ -45,7 +45,7 @@ public class BaseMvpPresenter<V extends IBaseMvpView> implements IBaseMvpPresent
      */
     public void attachView(V view) {
         if (LibMvpConfig.isShowLibMvpLog) {
-            Log.i(TAG, "attachView->view:" + view);
+            Log.v(TAG, "attachView->view:" + view);
         }
         this.view = new WeakReference(view);
     }
