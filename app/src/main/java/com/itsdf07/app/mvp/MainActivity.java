@@ -2,12 +2,14 @@ package com.itsdf07.app.mvp;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 
+import com.itsdf07.app.mvp.deviceinfo.MobileInfoActivity;
 import com.itsdf07.lib.alog.ALog;
 import com.itsdf07.lib.mvp.BaseMvpActivity;
 
-public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainContracts.IMainView {
+public class MainActivity extends BaseMvpActivity<MainPresenter> implements MainContracts.IMainView, View.OnClickListener {
 
     @Override
     public int getLayoutId() {
@@ -23,9 +25,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     @Override
     public void onInitView() {
         ALog.v("...");
-        findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_2_deviceInfo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MobileInfoActivity.class));
             }
         });
     }
@@ -47,8 +50,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
     }
 
     @Override
-    public Activity getSelfActivity() {
+    public MainActivity getSelfActivity() {
         ALog.v("...");
         return this;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_2_deviceInfo:
+
+                break;
+        }
     }
 }
