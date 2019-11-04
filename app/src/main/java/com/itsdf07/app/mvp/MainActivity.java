@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.itsdf07.app.mvp.deviceinfo.MobileInfoActivity;
+import com.itsdf07.app.mvp.nf877.ble.BLEScanActivity;
 import com.itsdf07.lib.alog.ALog;
 import com.itsdf07.lib.mvp.BaseMvpActivity;
 
@@ -29,6 +30,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Main
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, MobileInfoActivity.class));
+            }
+        });
+        findViewById(R.id.btn_2_nf877).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, BLEScanActivity.class));
             }
         });
     }

@@ -28,6 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".deviceinfo.MobileInfoActivity" />
+        <activity android:name=".nf877.ble.BLEScanActivity" />
     </application>
 
 </manifest>
