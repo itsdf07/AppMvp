@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public class AppMvpApplication extends Application {
     //是否上报异常到Bugly平台
-    private final boolean isCrashReport2Bugly = false;
+    private final boolean isCrashReport2Bugly = true;
 
     @Override
     public void onCreate() {
@@ -49,7 +49,7 @@ public class AppMvpApplication extends Application {
 //        2、每一条Crash都会被立即上报；
 //        3、自定义日志将会在Logcat中输出。
 //        建议在测试阶段建议设置成true，发布时设置为false。
-//        CrashReport.initCrashReport(getApplicationContext(), "b461faabba", isCrashReport2Bugly);
+        CrashReport.initCrashReport(getApplicationContext(), "b461faabba", isCrashReport2Bugly);
 //        CrashReport.testJavaCrash();
         if (isCrashReport2Bugly) {
             ALog.v("开启Debug版本异常跟踪，可实时上报异常到Bugly平台，packageName：%s，processName：%s", packageName, processName);

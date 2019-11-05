@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="windowBackground">@color/color_aebecd</color>
+    <color name="navigationBarColor">@color/color_3f8ee9</color>
 
     <color name="color_e0e0e0">#e0e0e0</color>
     <color name="color_dddddd">#dddddd</color>
@@ -188,4 +189,55 @@
     <color name="color_191970">#191970</color> <!--midnightblue：中灰兰色 -->
     <color name="color_00008B">#00008B</color> <!--darkblue：暗蓝色 -->
     <color name="color_000080">#000080</color> <!--navy：海军色 -->
+
+
+    <color name="table_text_select_color">@android:color/white</color>
+    <color name="table_text_normal_color">#2B2B2B</color>
+    <color name="table_text_unable_color">#CBCBCB</color>
+    <color name="table_item_bg_normal_color">@android:color/white</color>
+    <color name="table_item_bg_select_color">#D80C18</color>
+    <color name="table_divider_color">#DCDCDC</color>
+
+    <color name="table_text_secondary_color">#727272</color>
+
+    <color name="black">@color/color_black</color>
+    <color name="white">@color/color_white</color>
+    <color name="green">@color/color_009900</color>
+    <color name="gray">@color/color_666666</color>
+    <color name="lightGray">@color/color_999999</color>
+    <color name="bg_red1">@color/color_f26c60</color>
+
+    <color name="bg_gray">#F4F8FB</color>
+    <color name="bg_white">#ffffff</color>
+    <color name="bg_blue">#1fbaf3</color>
+    <color name="bg_red">#e7141d</color>
+    <color name="bg_black">#0e0e0e</color>
+    <color name="text_blue1">#1EC0F7</color>
+
+    <color name="text_light_black">#6f6d6e</color>
+    <color name="text_gray">@color/color_b7b2b1</color>
+    <color name="text_white">#ffffff</color>
+    <color name="text_black">#000000</color>
+    <!-- hint color -->
+    <color name="edit_text_gray">#d2d2d2</color>
+
+
+    <color name="text_light_blue">#A6D6EE</color>
+
+    <!-- 分割线 -->
+    <color name="line_gray">@color/color_e0e0e0</color>
+
+    <color name="bg_chat_bg_gray">#ebebeb</color>
+    <color name="gray_normal">#666667</color>
+    <color name="bg_gray4">#f6f7f9</color>
+    <color name="color_system_msg_bg">#2f000000</color>
+    <color name="bg_gray3">@color/color_dddddd</color>
+
+    <color name="line_gray4">#f7f7f7</color>
+    <color name="bg_gray2">#dadbdd</color><!-- 分类背影色 -->
+    <color name="color_tv1">#fffdbf01</color>
+    <color name="color_tv1_pressed">#affdbf01</color>
+    <color name="emojicon_tab_selected">#D9D9D9</color>
+    <color name="emojicon_tab_normal">#ffffff</color>
+    <color name="bg_light_gray">#fafafa</color>
 </resources>

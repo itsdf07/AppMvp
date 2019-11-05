@@ -1,6 +1,8 @@
 package com.itsdf07.app.mvp.nf877.ble;
 
+import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -49,7 +51,15 @@ public class BLEScanActivity extends BaseMvpActivity<BLEScanPresenter> implement
 
     @Override
     public void onInitView() {
-
+        lvBles.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(BLEScanActivity.this, BLEActivity.class);
+                intent.putExtra(BLEPresenter.EXTRA_BLEDEVICE, presenter.getBLEs().get(position));
+                startActivity(intent);
+                return false;
+            }
+        });
     }
 
     @Override

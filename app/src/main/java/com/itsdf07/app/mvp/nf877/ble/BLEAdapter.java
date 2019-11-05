@@ -1,13 +1,16 @@
 package com.itsdf07.app.mvp.nf877.ble;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.itsdf07.app.mvp.R;
+import com.itsdf07.lib.alog.ALog;
 import com.itsdf07.lib.bt.ble.LinkedHashMap;
 import com.itsdf07.lib.bt.ble.client.scan.BLEScanResult;
 
@@ -19,10 +22,12 @@ import com.itsdf07.lib.bt.ble.client.scan.BLEScanResult;
  */
 public class BLEAdapter extends BaseAdapter {
     private LinkedHashMap<String, BLEScanResult> scanedResults;
+    private Context context;
     //反射器
     LayoutInflater inflater;
 
     public BLEAdapter(Context context) {
+        this.context = context;
         this.inflater = LayoutInflater.from(context);
     }
 
@@ -32,6 +37,7 @@ public class BLEAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        ALog.dTag("BLEAdapter", "size:%s", scanedResults.size());
         return scanedResults.size();
     }
 

@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/tv_ble_rssi"
         android:layout_width="80dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
         tools:text="BLE设备信号值" />
@@ -22,6 +22,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:text="连接"
+        android:visibility="gone"
         tools:text="BLE设备连接" />
 
     <LinearLayout
