@@ -309,6 +309,7 @@
                     android:textSize="30sp" />
             </LinearLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -317,13 +318,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/string_tx_freq" />
+                    android:text="@string/string_freq" />
 
                 <EditText
-                    android:id="@+id/et_tx"
+                    android:id="@+id/et_freq"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:hint="@string/hint_tx_freq"
+                    android:hint="@string/hint_freq"
                     android:textSize="14sp" />
 
                 <TextView
@@ -335,46 +336,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:text="@string/string_enc" />
+                    android:text="@string/string_ctcss" />
 
                 <Spinner
-                    android:id="@+id/sp_ctcss2Encode"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/array_hz_ctcdcs" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/string_rx_freq" />
-
-                <EditText
-                    android:id="@+id/et_rx"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:hint="@string/hint_rx_freq"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="MHZ" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/string_dec" />
-
-                <Spinner
-                    android:id="@+id/sp_ctcss2Decode"
+                    android:id="@+id/sp_ctcss"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:entries="@array/array_hz_ctcdcs" />

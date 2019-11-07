@@ -17,7 +17,7 @@
     <!--发射提示音-->
     <string name="string_display_model">显示模式:</string>
     <!--TOT 超时-->
-    <string name="string_tot_timeout">TOT Timeout:</string>
+    <string name="string_tot_timeout">发射限时:</string>
     <!--屏保时间-->
     <string name="string_display_time">屏保时间:</string>
     <!--省电模式-->

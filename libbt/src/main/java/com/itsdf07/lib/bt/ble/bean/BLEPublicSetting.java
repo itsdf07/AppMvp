@@ -14,11 +14,11 @@ public class BLEPublicSetting {
     /**
      * 蓝牙开关:0-OFF,1-ON
      */
-    private int bluetoothStatus = 1;
+    private int bluetoothStatus = 0;
     /**
      * 静噪1:0~9
      */
-    private int squelch1 = 0;
+    private int squelch1 = 5;
     /**
      * 静噪2:保留
      */
@@ -34,12 +34,12 @@ public class BLEPublicSetting {
     /**
      * 扫描模式:0-TO,1-CO
      */
-    private int scanType = 0;
+    private int scanType = 1;
 
     /**
      * 显示模式:0-Black and white,1-Colorful
      */
-    private int displayModel = 0;
+    private int displayModel = 1;
 
     /**
      * BEEP声:0-OFF,1-ON

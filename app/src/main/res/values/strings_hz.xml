@@ -41,12 +41,9 @@
     <string name="string_beep_tone">Beep Tone</string>
 
     <string name="string_channel_switch">Channel:</string>
-    <string name="string_tx_freq">TX Freq:</string>
-    <string name="string_rx_freq">RX Freq:</string>
-    <string name="hint_tx_freq">Input TX Freq</string>
-    <string name="hint_rx_freq">Input RX Freq</string>
-    <string name="string_dec">CTC/DCS DEC:</string>
-    <string name="string_enc">CTC/DCS ENC:</string>
+    <string name="string_freq">Freq:</string>
+    <string name="hint_freq">Input Freq</string>
+    <string name="string_ctcss">CTCSS:</string>
     <string name="string_scan_add">Scan Add:</string>
     <string name="string_w_n">W/N:</string>
     <string name="string_tx_power">TX Power:</string>

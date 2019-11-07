@@ -17,22 +17,14 @@ public class BLEChannelSetting {
      */
     private int channelNum = 1;
     /**
-     * 发射频率
+     * 频率
      */
-    private String tx2Send = "";
+    private String txFreq = "";//462.0125
 
     /**
-     * 接收频率
+     * 亚音频
      */
-    private String tx2Receive = "";//462.0125
-    /**
-     * 亚音频解码（CTC/DCS解码）
-     */
-    private String ctcss2Decode = "";
-    /**
-     * 亚音频编码（CTC/DCS编码）
-     */
-    private String ctcss2Encode = "";
+    private String ctcss = "OFF/关闭";
 
     /**
      * 添加扫描
@@ -79,43 +71,26 @@ public class BLEChannelSetting {
         this.channelNum = channelNum;
     }
 
-    public String getTx2Send() {
-        return tx2Send;
+    public String getTxFreq() {
+        return txFreq;
     }
 
-    public void setTx2Send(String tx2Send) {
-        if (tx2Send.toUpperCase().equals("FFF.FFFF")) {
-            tx2Send = "";
+    public void setTxFreq(String txFreq) {
+        if (txFreq.toUpperCase().equals("FFF.FFFF")) {
+            txFreq = "";
         }
-        this.tx2Send = tx2Send;
+        this.txFreq = txFreq;
     }
 
-    public String getTx2Receive() {
-        return tx2Receive;
+
+    public String getCtcss() {
+        return ctcss;
     }
 
-    public void setTx2Receive(String tx2Receive) {
-        if (tx2Receive.toUpperCase().equals("FFF.FFFF")) {
-            tx2Receive = "";
-        }
-        this.tx2Receive = tx2Receive;
+    public void setCtcss(String ctcss) {
+        this.ctcss = ctcss;
     }
 
-    public String getCtcss2Decode() {
-        return ctcss2Decode;
-    }
-
-    public void setCtcss2Decode(String ctcss2Decode) {
-        this.ctcss2Decode = ctcss2Decode;
-    }
-
-    public String getCtcss2Encode() {
-        return ctcss2Encode;
-    }
-
-    public void setCtcss2Encode(String ctcss2Encode) {
-        this.ctcss2Encode = ctcss2Encode;
-    }
 
     public int getScan() {
         return scan;
@@ -175,9 +150,7 @@ public class BLEChannelSetting {
 
     @Override
     public String toString() {
-        return "信道:" + channelNum
-                + ",发射频率:" + tx2Send + ",接收频率:" + tx2Receive
-                + ",CTC/DCS解码:" + ctcss2Decode + ",CTC/DCS编码:" + ctcss2Encode
+        return "信道:" + channelNum + ",发射频率:" + txFreq + ",CTCSS:" + ctcss
                 + ",是否添加扫描:" + scan + ",带宽:" + bandwidth + ",发射功率:" + transmitPower + ",是否繁忙锁定:" + busyLock
                 + ",是否扰频:" + scramble + ",是否压扩:" + companding + ",是否特殊信令:" + specialSignaling;
     }

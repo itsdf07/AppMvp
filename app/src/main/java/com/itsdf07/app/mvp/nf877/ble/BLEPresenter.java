@@ -1,5 +1,6 @@
 package com.itsdf07.app.mvp.nf877.ble;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.itsdf07.lib.alog.ALog;
@@ -13,7 +14,6 @@ import com.itsdf07.lib.bt.ble.client.scan.BLEScanResult;
 import com.itsdf07.lib.mvp.presenter.BaseMvpPresenter;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * @Description:
@@ -29,23 +29,37 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
     public static final int BLE_STATUS_CONNECTING = 1;
     public static final int BLE_STATUS_CONNECTED = 2;
 
+    /**
+     * 当前支持的频道数
+     */
     private final int MAX_CHANNEL = 32;
     /**
-     * 16信道对应的独立信道协议
+     * 当前是否正在写数据:true-正在写入数据
      */
-    private HashMap<Integer, Object> bleChannelSettingHashMap = new HashMap<>();
+    private boolean isDataWriting = false;
+
+    /**
+     * 当前握手次数：握手次数为3次
+     */
+    private int handshakeNum = 0;
+
+    /**
+     * 发送的数据包个数:0表示公共协议数据包，后面的所以对应的是频道数据包
+     */
+    private int packageDataIndex = 0;
+
+    BLEContracts.IBLEModel ibleModel;
 
     private BLEScanResult bleScanResult;
 
     private OKBLEDevice okbleDevice;
 
+
     public BLEPresenter(BLEContracts.IBLEView view) {
         super(view);
-        initBleChannelSettingHashMap();
-//        okbleDevice = new OKBLEDeviceImp(getView().getSelfActivity(), bleScanResult);
+        ibleModel = new BLEModel(MAX_CHANNEL);
         okbleDevice = new OKBLEDeviceImp(getView().getSelfActivity());
         okbleDevice.addDeviceListener(this);
-//        okbleDevice.connect(true);
     }
 
     @Override
@@ -72,23 +86,59 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
         }
     }
 
-    private void initBleChannelSettingHashMap() {
-
-        BLEPublicSetting blePublicSetting = new BLEPublicSetting();
-        bleChannelSettingHashMap.put(0, blePublicSetting);
-        for (int i = 1; i <= MAX_CHANNEL; i++) {
-            BLEChannelSetting bleChannelSetting = new BLEChannelSetting();
-            bleChannelSetting.setChannelNum(i);
-            bleChannelSetting.setTx2Send("400.12500");
-            bleChannelSetting.setTx2Receive("400.12500");
-            bleChannelSetting.setCtcss2Decode("67.0");
-            bleChannelSetting.setCtcss2Encode("67.0");
-            bleChannelSetting.setTransmitPower(1);
-            bleChannelSetting.setScan(0);
-            bleChannelSetting.setBandwidth(1);
-            bleChannelSettingHashMap.put(i, bleChannelSetting);
-        }
+    @Override
+    public void writeData() {
+        getView().updateBLEOperateBtn(true);
+        isDataWriting = true;
+        handshakeNum = 1;
+        sendData(UUIDWRITE, ibleModel.writeHandshakeProtocol().get(handshakeNum - 1)[0]);
     }
+
+    @Override
+    public void readData() {
+        getView().updateBLEOperateBtn(true);
+        handshakeNum = 1;
+//        sendData(UUIDWRITE, ibleModel.readHandshakeProtocol().get(0));
+    }
+
+    @Override
+    public BLEPublicSetting getBLEPublicSetting() {
+        return ibleModel.getBLEPublicSetting();
+    }
+
+    @Override
+    public BLEChannelSetting getBLEChannelSetting(int position) {
+        return ibleModel.getBLEChannelSetting(position);
+    }
+
+    private void sendData(String uuid, byte data) {
+        byte[] datas = new byte[1];
+        datas[0] = data;
+        sendData(uuid, datas);
+    }
+
+    private void sendData(String uuid, byte[] data) {
+        ALog.dTag(TAG, "uuid:%s,data:%s", uuid, Arrays.toString(data));
+        okbleDevice.addWriteOperation(uuid, data, new OKBLEOperation.WriteOperationListener() {
+            @Override
+            public void onWriteValue(byte[] value) {
+                ALog.eTag(TAG, "value:%s", Arrays.toString(value));
+
+            }
+
+            @Override
+            public void onFail(int code, String errMsg) {
+                ALog.eTag(TAG, "code:%s,errMsg:%s", code, errMsg);
+
+            }
+
+            @Override
+            public void onExecuteSuccess(OKBLEOperation.OperationType type) {
+                ALog.eTag(TAG, "type:%s", type);
+            }
+        });
+    }
+
 
     @Override
     public void onConnected(String deviceTAG) {
@@ -154,8 +204,72 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
 
     @Override
     public void onReceivedValue(String deviceTAG, String uuid, byte[] value) {
-//        ALog.eTag(TAG, "onReceivedValue->isDataWriting:%s,handshakeNum:%s,deviceTAG:%s,uuid:%s,value:%s",
-//                isDataWriting, handshakeNum, deviceTAG, uuid, Arrays.toString(value));
+        ALog.eTag(TAG, "onReceivedValue->isDataWriting:%s,handshakeNum:%s,deviceTAG:%s,uuid:%s,value:%s",
+                isDataWriting, handshakeNum, deviceTAG, uuid, Arrays.toString(value));
+        if (isDataWriting) {//写入数据
+            switch (handshakeNum) {
+                case 1:
+                    if (value[0] == ibleModel.writeHandshakeProtocol().get(handshakeNum - 1)[1][0]) {
+                        handshakeNum++;
+                        sendData(UUIDWRITE, ibleModel.writeHandshakeProtocol().get(handshakeNum - 1)[0][0]);
+                    } else {
+
+                    }
+                    break;
+
+                case 2:
+                    if (value.length == ibleModel.writeHandshakeProtocol().get(handshakeNum - 1)[1].length) {
+                        boolean isMatch = true;
+                        for (int i = 0; i < value.length; i++) {
+                            if (value[i] != ibleModel.writeHandshakeProtocol().get(handshakeNum - 1)[1][i]) {
+                                isMatch = false;
+                                break;
+                            }
+                        }
+                        if (isMatch) {
+                            handshakeNum++;
+                            ALog.e(TAG, "onReceivedValue->握手成功....");
+                            // TODO 发送 (byte) 0x06
+                            sendData(UUIDWRITE, ibleModel.writeHandshakeProtocol().get(handshakeNum - 1)[0]);
+                        }
+                    } else {
+
+                    }
+                    break;
+                case 3:
+                    if (value[0] == ibleModel.writeHandshakeProtocol().get(handshakeNum - 1)[1][0]) {
+                        handshakeNum = 0;//握手结束，复位握手次数
+                        //TODO 开始发送第一个数据包:公共协议
+                        packageDataIndex++;
+                        sendData(UUIDWRITE, ibleModel.getBLEPublicDataPackage(getBLEPublicSetting()));
+                    }
+                    break;
+                default:
+                    if (value[0] == (byte) 0x06) {
+                        //TODO 开始发送第N+1个数据包:设置数据
+                        if (packageDataIndex > 32) {
+                            sendData(UUIDWRITE, (byte) 0x45);
+                            packageDataIndex = 0;
+                            isDataWriting = false;
+
+                            getView().getSelfActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getView().getSelfActivity(), "数据写入完成", Toast.LENGTH_SHORT).show();
+                                    getView().updateBLEOperateBtn(false);
+                                }
+                            });
+                        } else {
+                            sendData(UUIDWRITE, ibleModel.getChannelDataPackage(getBLEChannelSetting(packageDataIndex)));
+                            packageDataIndex++;
+                        }
+                    }
+                    break;
+            }
+
+        } else {//读取数据
+
+        }
     }
 
     @Override

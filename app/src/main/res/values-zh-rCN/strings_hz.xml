@@ -41,12 +41,9 @@
     <string name="string_beep_tone">哔音</string>
 
     <string name="string_channel_switch">信道选择:</string>
-    <string name="string_tx_freq">发射频率:</string>
-    <string name="string_rx_freq">接收频率:</string>
-    <string name="hint_tx_freq">输入发射频率</string>
-    <string name="hint_rx_freq">输入接收频率</string>
-    <string name="string_dec">CTC/DCS 解码:</string>
-    <string name="string_enc">CTC/DCS 编码:</string>
+    <string name="string_freq">频率:</string>
+    <string name="hint_freq">输入频率</string>
+    <string name="string_ctcss">CTCSS:</string>
     <string name="string_scan_add">扫描添加:</string>
     <string name="string_w_n">带宽:</string>
     <string name="string_tx_power">发射功率:</string>
