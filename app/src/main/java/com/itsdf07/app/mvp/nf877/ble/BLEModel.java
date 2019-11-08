@@ -178,21 +178,22 @@ public class BLEModel implements BLEContracts.IBLEModel {
      */
     private byte[] tx2Hex(String freq) {
         try {
-            byte[] tx = new byte[4];
+            byte[] freq2Byte = new byte[4];
+            //TODO 这里可以考虑做下频段的范围限制
             long l = new Double(Double.valueOf(Double.valueOf(freq).doubleValue() * 100000.0D).doubleValue()).longValue();
             ALog.dTag("tx2Hex", "param:%s,l:%s", freq, l);
             freq = l + "";
             if (freq.length() != 8) {
-                Log.d(TAG, "信道频率有误,param:" + freq);
+                ALog.eTag(TAG, "信道频率有误,param:%s", freq);
                 return null;
             }
-            tx[0] = (byte) Integer.parseInt(freq.substring(6, 8), 16);
-            tx[1] = (byte) Integer.parseInt(freq.substring(4, 6), 16);
-            tx[2] = (byte) Integer.parseInt(freq.substring(2, 4), 16);
-            tx[3] = (byte) Integer.parseInt(freq.substring(0, 2), 16);
-            return tx;
+            freq2Byte[0] = (byte) Integer.parseInt(freq.substring(6, 8), 16);
+            freq2Byte[1] = (byte) Integer.parseInt(freq.substring(4, 6), 16);
+            freq2Byte[2] = (byte) Integer.parseInt(freq.substring(2, 4), 16);
+            freq2Byte[3] = (byte) Integer.parseInt(freq.substring(0, 2), 16);
+            return freq2Byte;
         } catch (Exception e) {
-            Log.e(TAG, "e:", e);
+            ALog.eTag(TAG, "e:%s", e);
         }
         return null;
     }
@@ -242,6 +243,7 @@ public class BLEModel implements BLEContracts.IBLEModel {
      */
     @Override
     public String demical2Hex(int demical) {
+        ALog.dTag(TAG, "demical:%s", demical);
         if (!(demical + "").matches("[0-9]*")) {
             return "";
         }

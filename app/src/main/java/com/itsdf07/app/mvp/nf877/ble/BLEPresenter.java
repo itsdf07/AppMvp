@@ -118,23 +118,23 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
     }
 
     private void sendData(String uuid, byte[] data) {
-        ALog.dTag(TAG, "uuid:%s,data:%s", uuid, Arrays.toString(data));
+        ALog.vTag(TAG, "uuid:%s,data:%s", uuid, Arrays.toString(data));
         okbleDevice.addWriteOperation(uuid, data, new OKBLEOperation.WriteOperationListener() {
             @Override
             public void onWriteValue(byte[] value) {
-                ALog.eTag(TAG, "value:%s", Arrays.toString(value));
+                ALog.dTag(TAG, "value:%s", Arrays.toString(value));
 
             }
 
             @Override
             public void onFail(int code, String errMsg) {
-                ALog.eTag(TAG, "code:%s,errMsg:%s", code, errMsg);
+                ALog.dTag(TAG, "code:%s,errMsg:%s", code, errMsg);
 
             }
 
             @Override
             public void onExecuteSuccess(OKBLEOperation.OperationType type) {
-                ALog.eTag(TAG, "type:%s", type);
+                ALog.dTag(TAG, "type:%s", type);
             }
         });
     }
@@ -142,7 +142,7 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
 
     @Override
     public void onConnected(String deviceTAG) {
-        ALog.eTag(TAG, "deviceTAG:%s", deviceTAG);
+        ALog.dTag(TAG, "deviceTAG:%s", deviceTAG);
         getView().getSelfActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -156,7 +156,7 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
         okbleDevice.addNotifyOrIndicateOperation(UUIDNOTIFY, true, new OKBLEOperation.NotifyOrIndicateOperationListener() {
             @Override
             public void onNotifyOrIndicateComplete() {
-                ALog.eTag(TAG, "通知已打开");
+                ALog.dTag(TAG, "通知已打开");
                 getView().getSelfActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -170,7 +170,7 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
 
             @Override
             public void onFail(int code, final String errMsg) {
-                ALog.eTag(TAG, "code:%s,errMsg:%s", code, errMsg);
+                ALog.dTag(TAG, "code:%s,errMsg:%s", code, errMsg);
                 getView().getSelfActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -180,7 +180,7 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
 
             @Override
             public void onExecuteSuccess(OKBLEOperation.OperationType type) {
-                ALog.eTag(TAG, "type:%s", type.name());
+                ALog.dTag(TAG, "type:%s", type.name());
                 operationType[0] = type;
             }
         });
@@ -188,7 +188,7 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
 
     @Override
     public void onDisconnected(String deviceTAG) {
-        ALog.eTag(TAG, "deviceTAG:%s", deviceTAG);
+        ALog.dTag(TAG, "deviceTAG:%s", deviceTAG);
         getView().getSelfActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -230,7 +230,6 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                         }
                         if (isMatch) {
                             handshakeNum++;
-                            ALog.e(TAG, "onReceivedValue->握手成功....");
                             // TODO 发送 (byte) 0x06
                             sendData(UUIDWRITE, ibleModel.handshakeProtocol().get(handshakeNum - 1)[0]);
                         }
@@ -241,9 +240,12 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                 case 3:
                     if (value[0] == ibleModel.handshakeProtocol().get(handshakeNum - 1)[1][0]) {
                         handshakeNum = 0;//握手结束，复位握手次数
+
                         //TODO 开始发送第一个数据包:公共协议
                         packageDataIndex++;
-                        sendData(UUIDWRITE, ibleModel.getBLEPublicDataPackage(getBLEPublicSetting()));
+                        BLEPublicSetting blePublicSetting = getBLEPublicSetting();
+                        ALog.eTag(TAG, "写频握手成功,开始写入公共协议:%s",blePublicSetting.toString());
+                        sendData(UUIDWRITE, ibleModel.getBLEPublicDataPackage(blePublicSetting));
                     }
                     break;
                 default:
@@ -262,7 +264,9 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                                 }
                             });
                         } else {
-                            sendData(UUIDWRITE, ibleModel.getChannelDataPackage(getBLEChannelSetting(packageDataIndex)));
+                            BLEChannelSetting bleChannelSetting = getBLEChannelSetting(packageDataIndex);
+                            ALog.eTag(TAG, "写频握手成功,开始写入信道协议:%s", bleChannelSetting.toString());
+                            sendData(UUIDWRITE, ibleModel.getChannelDataPackage(bleChannelSetting));
                             packageDataIndex++;
                         }
                     }
@@ -290,7 +294,6 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                         }
                         if (isMatch) {
                             handshakeNum++;
-                            ALog.e(TAG, "onReceivedValue->握手成功....");
                             // TODO 发送 (byte) 0x06
                             sendData(UUIDWRITE, ibleModel.handshakeProtocol().get(handshakeNum - 1)[0]);
                         }
@@ -302,6 +305,7 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                     if (value[0] == ibleModel.handshakeProtocol().get(handshakeNum - 1)[1][0]) {
                         handshakeNum = 0;//握手结束，复位握手次数
                         //TODO 开始读取第一个数据包:公共协议
+                        ALog.eTag(TAG, "读频握手成功,开始读取协议");
                         packageDataIndex = 0;
                         readPublie[0] = 0x52;
                         readPublie[1] = 0x0A;
@@ -330,11 +334,9 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                             getBLEPublicSetting().setTotTimeOut(value[14]);
                             getBLEPublicSetting().setDisplayTime(value[15]);
                             getBLEPublicSetting().setPowerMode(value[16]);
-                            ALog.dTag(TAG, "BLEPublicSetting:%s", getBLEPublicSetting().toString());
+                            ALog.eTag(TAG, "读取到的公共协议内容:%s", getBLEPublicSetting().toString());
                         } else {
-                            Log.e("readData", "接收到频道协议数据，第" + packageDataIndex + "个数据接收成功");
                             int results = value[4] + (value[5] << 8) + (value[6] << 16) + (value[7] << 24);
-                            ALog.dTag(TAG, "results:%s", results);
                             String freq = ibleModel.demical2Hex(results);
                             String freqResult = freq.substring(0, 3) + "." + freq.substring(3);
                             getBLEChannelSetting(packageDataIndex).setTxFreq(freqResult);
@@ -357,7 +359,7 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                             getBLEChannelSetting(packageDataIndex).setTransmitPower(value[16] % 2);
                             getBLEChannelSetting(packageDataIndex).setBandwidth(value[16] >> 1);
                             getBLEChannelSetting(packageDataIndex).setScan(value[17] >> 1);
-                            ALog.dTag(TAG, "BLEChannelSetting:%s", getBLEChannelSetting(packageDataIndex).toString());
+                            ALog.eTag(TAG, "读取到的信道协议内容:%s",getBLEChannelSetting(packageDataIndex).toString());
                         }
                         ALog.dTag(TAG, "通知下位机第" + packageDataIndex + "个数据包接收成功");
                         sendData(UUIDWRITE, (byte) 0x06);
@@ -392,16 +394,16 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
 
     @Override
     public void onWriteValue(String deviceTAG, String uuid, byte[] value, boolean success) {
-        ALog.eTag(TAG, "deviceTAG:%s,uuid:%s,success:%s,value:%s", deviceTAG, uuid, success, Arrays.toString(value));
+        ALog.dTag(TAG, "deviceTAG:%s,uuid:%s,success:%s,value:%s", deviceTAG, uuid, success, Arrays.toString(value));
     }
 
     @Override
     public void onReadValue(String deviceTAG, String uuid, byte[] value, boolean success) {
-        ALog.eTag(TAG, "deviceTAG:%s,uuid:%s,success:%s,value:%s", deviceTAG, uuid, success, Arrays.toString(value));
+        ALog.dTag(TAG, "deviceTAG:%s,uuid:%s,success:%s,value:%s", deviceTAG, uuid, success, Arrays.toString(value));
     }
 
     @Override
     public void onNotifyOrIndicateComplete(String deviceTAG, String uuid, boolean enable, boolean success) {
-        ALog.eTag(TAG, "deviceTAG:%s,uuid:%s,success:%s,enable:%s", deviceTAG, uuid, success, enable);
+        ALog.dTag(TAG, "deviceTAG:%s,uuid:%s,success:%s,enable:%s", deviceTAG, uuid, success, enable);
     }
 }

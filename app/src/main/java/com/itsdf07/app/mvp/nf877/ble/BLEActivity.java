@@ -179,7 +179,7 @@ public class BLEActivity extends BaseMvpActivity<BLEPresenter> implements BLECon
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        ALog.eTag(TAG, "position:%s,id:%s", position, id);
+        ALog.vTag(TAG, "position:%s,id:%s", position, id);
         if (null == presenter.getBLEPublicSetting()) {
             Log.w(TAG, "blePublicSetting is null");
             return;
