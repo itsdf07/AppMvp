@@ -300,5 +300,7 @@ public class BLEActivity extends BaseMvpActivity<BLEPresenter> implements BLECon
     public void updateBLEOperateBtn(boolean operating) {
         btnReadHz.setEnabled(!operating);
         btnWriteHz.setEnabled(!operating);
+        updatePublic(presenter.getBLEPublicSetting());
+        updateChannel(presenter.getBLEChannelSetting(spXdxz.getSelectedItemPosition() + 1));
     }
 }

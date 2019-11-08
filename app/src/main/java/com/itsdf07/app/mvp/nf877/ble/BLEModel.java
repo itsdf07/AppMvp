@@ -46,7 +46,7 @@ public class BLEModel implements BLEContracts.IBLEModel {
             BLEChannelSetting bleChannelSetting = new BLEChannelSetting();
             bleChannelSetting.setChannelNum(i);
             bleChannelSetting.setTxFreq("462.5625");
-            bleChannelSetting.setCtcss("OFF/关闭");
+            bleChannelSetting.setCtcss("-1");
             bleChannelSetting.setTransmitPower(1);
             bleChannelSetting.setScan(0);
             bleChannelSetting.setBandwidth(0);
@@ -66,7 +66,7 @@ public class BLEModel implements BLEContracts.IBLEModel {
     }
 
     @Override
-    public ArrayList<byte[][]> writeHandshakeProtocol() {
+    public ArrayList<byte[][]> handshakeProtocol() {
         //索引值奇数为App应发送的握手数据给BLE设备，偶数为APP应接收BLE的握手响应数据
         ArrayList<byte[][]> writeHandshakeProtocol = new ArrayList<>();
         byte[][] protocol_step1_2handshake = new byte[2][8];
@@ -205,6 +205,7 @@ public class BLEModel implements BLEContracts.IBLEModel {
      * @return 9306
      */
     private byte[] converCtcDcs2DEC(String value) {
+        ALog.dTag(TAG, "value:%s", value);
         byte[] dec = new byte[2];
         if (value.contains("I")) {//0xA800
             value = value.replace("D", "").replace("I", "");
@@ -239,7 +240,8 @@ public class BLEModel implements BLEContracts.IBLEModel {
      * @param demical 十进制值
      * @return
      */
-    public static String demical2Hex(int demical) {
+    @Override
+    public String demical2Hex(int demical) {
         if (!(demical + "").matches("[0-9]*")) {
             return "";
         }

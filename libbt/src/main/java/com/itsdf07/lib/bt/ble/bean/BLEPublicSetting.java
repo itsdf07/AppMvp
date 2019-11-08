@@ -173,6 +173,6 @@ public class BLEPublicSetting {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "gps:" + gps + ",bluetoothStatus:" + bluetoothStatus + ",squelch1:" + squelch1 + ",voiceLevel:" + voiceLevel + ",voiceDelay:" + voiceDelay + ",scanType:" + scanType + ",displayModel:" + displayModel + ",beep:" + beep + ",voice2Send:" + voice2Send + ",totTimeOut:" + totTimeOut + ",displayTime:" + displayTime + ",powerMode:" + powerMode;
     }
 }

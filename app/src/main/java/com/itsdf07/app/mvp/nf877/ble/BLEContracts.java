@@ -53,11 +53,11 @@ public interface BLEContracts<T> {
 
 
         /**
-         * 获取数据写入握手协议头
+         * 设备握手协议头
          *
          * @return
          */
-        ArrayList<byte[][]> writeHandshakeProtocol();
+        ArrayList<byte[][]> handshakeProtocol();
 
 
         /**
@@ -75,5 +75,7 @@ public interface BLEContracts<T> {
          * @return
          */
         byte[] getChannelDataPackage(BLEChannelSetting bleChannelSetting);
+
+        String demical2Hex(int demical);
     }
 }
