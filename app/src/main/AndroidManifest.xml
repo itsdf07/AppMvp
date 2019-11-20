@@ -30,6 +30,7 @@
         <activity android:name=".deviceinfo.MobileInfoActivity" />
         <activity android:name=".nf877.ble.BLEScanActivity" />
         <activity android:name=".nf877.ble.BLEActivity" />
+        <activity android:name=".activity.PingActivity" />
     </application>
 
 </manifest>

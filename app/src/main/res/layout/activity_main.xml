@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/btn_2_deviceInfo"
@@ -15,4 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="NF877蓝牙BLE写频通讯" />
+
+    <Button
+        android:id="@+id/btn_ping_host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ping域名" />
+
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
