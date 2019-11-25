@@ -21,6 +21,7 @@ public class PingActivity extends BaseMvpActivity<PingPresenter> implements Ping
     private EditText etPackageCount;
     private EditText etPackageSize;
     private EditText etPackageDelaytime;
+    private EditText etHostGroup;
     private TextView tvPingResultInfo;
 
     @Override
@@ -49,6 +50,7 @@ public class PingActivity extends BaseMvpActivity<PingPresenter> implements Ping
         etPackageCount = findViewById(R.id.et_package_count);
         etPackageSize = findViewById(R.id.et_package_size);
         etPackageDelaytime = findViewById(R.id.et_package_delaytime);
+        etHostGroup = findViewById(R.id.et_host_group);
         tvPingResultInfo = findViewById(R.id.tv_pingresult);
         tvPingResultInfo.setMovementMethod(ScrollingMovementMethod.getInstance());
         findViewById(R.id.btn_ping).setOnClickListener(new View.OnClickListener() {
@@ -59,6 +61,16 @@ public class PingActivity extends BaseMvpActivity<PingPresenter> implements Ping
                 int packageSize = Integer.parseInt(etPackageSize.getText().toString().trim());
                 int packageDelaytime = Integer.parseInt(etPackageDelaytime.getText().toString().trim());
                 presenter.onPing(etHost.getText().toString().trim(), packageCount, packageSize, packageDelaytime);
+            }
+        });
+        findViewById(R.id.btn_ping_host).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvPingResultInfo.setText("");
+                int packageCount = Integer.parseInt(etPackageCount.getText().toString().trim());
+                int packageSize = Integer.parseInt(etPackageSize.getText().toString().trim());
+                int packageDelaytime = Integer.parseInt(etPackageDelaytime.getText().toString().trim());
+                presenter.onPingHost(etHostGroup.getText().toString().trim(), packageCount, packageSize, packageDelaytime);
             }
         });
     }
