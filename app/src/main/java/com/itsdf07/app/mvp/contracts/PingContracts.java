@@ -6,7 +6,8 @@ import com.itsdf07.app.mvp.model.PingModel;
 import com.itsdf07.lib.mvp.model.IBaseMvpModel;
 import com.itsdf07.lib.mvp.presenter.IBaseMvpPresenter;
 import com.itsdf07.lib.mvp.view.IBaseMvpView;
-import com.itsdf07.lib.net.OkHttp3CallbackImpl;
+
+import java.util.HashMap;
 
 /**
  * @Description:
@@ -43,6 +44,13 @@ public interface PingContracts {
          * @param delayTime    发送数据包的间隔时间(s)
          */
         void onPingHost(String group, int packageCount, int packageSize, int delayTime);
+
+        /**
+         * 保存ping出来的新结果数据
+         *
+         * @param hostMaps
+         */
+        void onAddPingResults(HashMap<String, HashMap<String, String>> hostMaps);
     }
 
     interface IPingModel extends IBaseMvpModel {
@@ -59,5 +67,11 @@ public interface PingContracts {
          */
         void ping(String host, int packageCount, int packageSize, int delayTime, PingModel.IPingResultCallback callback);
 
+        /**
+         * 保存ping出来的新结果数据
+         *
+         * @param hostMaps
+         */
+        void addPingResults(HashMap<String, HashMap<String, String>> hostMaps);
     }
 }

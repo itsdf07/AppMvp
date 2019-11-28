@@ -3,12 +3,14 @@ package com.itsdf07.app.mvp.presenter;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
 import com.itsdf07.app.mvp.bean.RespPingHostBean;
 import com.itsdf07.app.mvp.contracts.PingContracts;
 import com.itsdf07.app.mvp.model.PingModel;
+import com.itsdf07.lib.alog.ALog;
 import com.itsdf07.lib.mvp.presenter.BaseMvpPresenter;
 
 import java.util.HashMap;
@@ -73,6 +75,7 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
         if (group == null) {
             group = "";
         }
+        hostMaps.clear();
         iPingModel.getHosts(group.trim(), new PingModel.IHostsCallback() {
             @Override
             public void hostsResultCallback(List<RespPingHostBean.DatasBean> datas) {
@@ -82,6 +85,11 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
                 ping(packageCount, packageSize, delayTime, datas, 0);
             }
         });
+    }
+
+    @Override
+    public void onAddPingResults(HashMap<String, HashMap<String, String>> hostMaps) {
+        iPingModel.addPingResults(hostMaps);
     }
 
     private void ping(final int packageCount, final int packageSize,
@@ -94,20 +102,38 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
                     @Override
                     public void pingResultCallback(final String pingResult) {
                         if (pingResult.startsWith("PING")) {
-                            String host1 = pingResult.substring("PING ".length(), pingResult.indexOf(" ("));
+                            String nextHost = pingResult.substring("PING ".length(), pingResult.indexOf(" ("));
                             String ip = pingResult.substring(pingResult.indexOf("(") + 1, pingResult.indexOf(")"));
-                            for (RespPingHostBean.DatasBean.AddressesBean bean : datas.get(index).getAddresses()) {
-                                if (bean == null) {
-                                    continue;
+                            ALog.eTag("HOST_IP", "nextHost,%s,ip:%s", nextHost, ip);
+                            if (datas.get(index).getAddresses().isEmpty()) {
+                                HashMap<String, String> maps = new HashMap<>();
+                                maps.put("nextHost", nextHost);
+                                maps.put("ip", ip);
+                                maps.put("host", host);
+                                hostMaps.put(host, maps);
+                            } else {
+                                boolean isNew = true;
+                                for (RespPingHostBean.DatasBean.AddressesBean bean : datas.get(index).getAddresses()) {
+                                    if (bean == null) {
+                                        continue;
+                                    }
+                                    ALog.eTag("HOST_IP", "prNextHost,%s,prIp:%s", bean.getPrNextHost(), bean.getPrIp());
+                                    if ((!TextUtils.isEmpty(bean.getPrIp()) & bean.getPrIp().equals(ip))
+                                            && (!TextUtils.isEmpty(bean.getPrNextHost()) && bean.getPrNextHost().equals(nextHost))) {
+                                        isNew = false;
+                                        break;
+                                    }
                                 }
-                                if (!bean.getPrIp().equals(ip)) {
+                                ALog.eTag("HOST_IP", "isNew:%s", isNew);
+                                if (isNew) {
                                     HashMap<String, String> maps = new HashMap<>();
-                                    maps.put("nexthost", host1);
+                                    maps.put("nextHost", nextHost);
                                     maps.put("ip", ip);
+                                    maps.put("host", host);
                                     hostMaps.put(host, maps);
-                                    break;
                                 }
                             }
+
                         }
 
                         Message msg = mMainHandler.obtainMessage();
@@ -126,6 +152,9 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
                     public void pingOver(String host) {
                         final int nextIndex = index + 1;
                         if (nextIndex >= datas.size()) {
+                            if (!hostMaps.isEmpty()) {
+                                onAddPingResults(hostMaps);
+                            }
                             return;
                         }
                         ping(packageCount, packageSize, delayTime, datas, nextIndex);

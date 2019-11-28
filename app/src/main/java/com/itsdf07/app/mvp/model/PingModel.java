@@ -9,6 +9,7 @@ import com.itsdf07.lib.net.OkHttp3CallbackImpl;
 import com.itsdf07.lib.net.OkHttp3Utils;
 import com.itsdf07.lib.net.RequestInfo;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -43,7 +45,7 @@ public class PingModel implements PingContracts.IPingModel {
 
     @Override
     public void getHosts(String group, final IHostsCallback callback) {
-        String url = "http://192.168.2.130:8087/itsdf07/ping/hosts";
+        final String url = "http://192.168.2.130:8087/itsdf07/ping/hosts";
         JSONObject root = new JSONObject();
         try {
             root.put("group", group);
@@ -53,11 +55,12 @@ public class PingModel implements PingContracts.IPingModel {
         OkHttp3Utils.getInstance().postAsyn2Data(url, root.toString(), new OkHttp3CallbackImpl() {
             @Override
             public void onStart(RequestInfo requestInfo) {
-
+                ALog.dTag(TAG, "url:%s,body:%s", requestInfo.getUrl(), requestInfo.getBody());
             }
 
             @Override
             public void onSuccess(OkBaseBean okBaseBean) {
+                ALog.dTag(TAG, "hostResult:%s", okBaseBean.getEncrptyResult());
                 RespPingHostBean pingHostBean = new Gson().fromJson(okBaseBean.getEncrptyResult(), RespPingHostBean.class);
                 ALog.dTag(TAG, okBaseBean.getEncrptyResult());
                 if (null != callback) {
@@ -67,12 +70,12 @@ public class PingModel implements PingContracts.IPingModel {
 
             @Override
             public void onFailed(OkBaseBean bean) {
-
+                ALog.dTag(TAG, "bean:%s", bean.getEncrptyResult());
             }
 
             @Override
             public void onFinish() {
-
+                ALog.dTag(TAG, "url:%s", url);
             }
         }, true);
     }
@@ -148,6 +151,54 @@ public class PingModel implements PingContracts.IPingModel {
 
         if (null != callback) {
             callback.pingOver(host);
+        }
+    }
+
+    @Override
+    public void addPingResults(HashMap<String, HashMap<String, String>> hostMaps) {
+        final String url = "http://192.168.2.130:8087/itsdf07/ping/addPingReuslt";
+        try {
+            JSONObject root = new JSONObject();
+            JSONArray datas = new JSONArray();
+
+            for (Map.Entry<String, HashMap<String, String>> map : hostMaps.entrySet()) {
+                JSONObject data = new JSONObject();
+
+                data.put("iccid", "123456");
+                data.put("imei", "654321");
+                data.put("provider", "Android");
+                data.put("os", "8.0");
+                data.put("netType", "4G");
+                data.put("host", map.getValue().get("host"));
+                data.put("nextHost", map.getValue().get("nextHost"));
+                data.put("ip", map.getValue().get("ip"));
+                datas.put(data);
+            }
+            root.put("datas", datas);
+            ALog.dTag(TAG, "root:%s", root.toString());
+            OkHttp3Utils.getInstance().postAsyn2Data(url, root.toString(), new OkHttp3CallbackImpl() {
+                @Override
+                public void onStart(RequestInfo requestInfo) {
+                    ALog.dTag(TAG, "url:%s,body:%s", requestInfo.getUrl(), requestInfo.getBody());
+                }
+
+                @Override
+                public void onSuccess(OkBaseBean okBaseBean) {
+                    ALog.dTag(TAG, "hostResult:%s", okBaseBean.getEncrptyResult());
+                }
+
+                @Override
+                public void onFailed(OkBaseBean bean) {
+                    ALog.dTag(TAG, "bean:%s", bean.getEncrptyResult());
+                }
+
+                @Override
+                public void onFinish() {
+                    ALog.dTag(TAG, "url:%s", url);
+                }
+            }, true);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
