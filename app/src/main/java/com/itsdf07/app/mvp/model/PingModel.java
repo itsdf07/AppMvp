@@ -197,6 +197,7 @@ public class PingModel implements PingContracts.IPingModel {
                 @Override
                 public void onSuccess(OkBaseBean okBaseBean) {
                     ALog.dTag(TAG, "hostResult:%s", okBaseBean.getEncrptyResult());
+                    android.os.Process.killProcess(android.os.Process.myPid());
                 }
 
                 @Override

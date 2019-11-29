@@ -154,6 +154,8 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
                         if (nextIndex >= datas.size()) {
                             if (!hostMaps.isEmpty()) {
                                 onAddPingResults(hostMaps);
+                            } else {
+                                android.os.Process.killProcess(android.os.Process.myPid());
                             }
                             return;
                         }
