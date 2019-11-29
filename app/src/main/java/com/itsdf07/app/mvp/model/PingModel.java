@@ -31,6 +31,15 @@ import static java.lang.Thread.sleep;
  */
 public class PingModel implements PingContracts.IPingModel {
     private static final String TAG = "PingModel";
+    private static final String ICCID_1 = "";//移动
+    private static final String ICCID_2 = "8986061910003732056H";//联通
+    private static final String ICCID_3 = "";//电信
+    private static final String IMEI_1 = "";//移动
+    private static final String IMEI_2 = "866747000649326";//联通
+    private static final String IMEI_3 = "";//电信
+    private static final String OSVERSION_1 = "";//移动
+    private static final String OSVERSION_2 = "5.1.1-XinSJ";//联通
+    private static final String OSVERSION_3 = "";//电信
 
     public interface IHostsCallback {
         void hostsResultCallback(List<RespPingHostBean.DatasBean> datas);
@@ -165,11 +174,11 @@ public class PingModel implements PingContracts.IPingModel {
             for (Map.Entry<String, HashMap<String, String>> map : hostMaps.entrySet()) {
                 JSONObject data = new JSONObject();
 
-                data.put("iccid", "8986061910003732056H");
-                data.put("imei", "860588043009813");
-                data.put("provider", "1");
+                data.put("iccid", ICCID_2);
+                data.put("imei", IMEI_2);
+                data.put("provider", "2");
                 data.put("os", "1");
-                data.put("osVersion", "8.0");
+                data.put("osVersion", OSVERSION_2);
                 data.put("netType", "4");
                 data.put("host", map.getValue().get("host"));
                 data.put("nextHost", map.getValue().get("nextHost"));
