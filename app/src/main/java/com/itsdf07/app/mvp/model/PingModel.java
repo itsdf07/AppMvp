@@ -3,6 +3,7 @@ package com.itsdf07.app.mvp.model;
 import com.google.gson.Gson;
 import com.itsdf07.app.mvp.UrlGlobal;
 import com.itsdf07.app.mvp.bean.RespPingHostBean;
+import com.itsdf07.app.mvp.common.Tools2DeviceInfo;
 import com.itsdf07.app.mvp.contracts.PingContracts;
 import com.itsdf07.lib.alog.ALog;
 import com.itsdf07.lib.net.OkBaseBean;
@@ -178,7 +179,7 @@ public class PingModel implements PingContracts.IPingModel {
                 data.put("imei", IMEI_2);
                 data.put("provider", "2");
                 data.put("os", "1");
-                data.put("osVersion", OSVERSION_2);
+                data.put("osVersion", Tools2DeviceInfo.getInstance().getVersionRelease() + "-" + Tools2DeviceInfo.getInstance().getModel());
                 data.put("netType", "4");
                 data.put("host", map.getValue().get("host"));
                 data.put("nextHost", map.getValue().get("nextHost"));
