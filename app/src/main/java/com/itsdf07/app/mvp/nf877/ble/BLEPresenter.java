@@ -28,7 +28,6 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
     public static final int BLE_STATUS_DISCONNECTED = 0;
     public static final int BLE_STATUS_CONNECTING = 1;
     public static final int BLE_STATUS_CONNECTED = 2;
-
     /**
      * 当前支持的频道数
      */
@@ -244,7 +243,7 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                         //TODO 开始发送第一个数据包:公共协议
                         packageDataIndex++;
                         BLEPublicSetting blePublicSetting = getBLEPublicSetting();
-                        ALog.eTag(TAG, "写频握手成功,开始写入公共协议:%s",blePublicSetting.toString());
+                        ALog.eTag(TAG, "写频握手成功,开始写入公共协议:%s", blePublicSetting.toString());
                         sendData(UUIDWRITE, ibleModel.getBLEPublicDataPackage(blePublicSetting));
                     }
                     break;
@@ -336,10 +335,15 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                             getBLEPublicSetting().setPowerMode(value[16]);
                             ALog.eTag(TAG, "读取到的公共协议内容:%s", getBLEPublicSetting().toString());
                         } else {
-                            int results = value[4] + (value[5] << 8) + (value[6] << 16) + (value[7] << 24);
-                            String freq = ibleModel.demical2Hex(results);
-                            String freqResult = freq.substring(0, 3) + "." + freq.substring(3);
-                            getBLEChannelSetting(packageDataIndex).setTxFreq(freqResult);
+                            //如果信道是空的，那么读取到的4个字节都是FF
+                            if (value[4] == (byte) 0xFF && value[5] == (byte) 0xFF && value[6] == (byte) 0xFF && value[7] == (byte) 0xFF) {
+                                getBLEChannelSetting(packageDataIndex).setTxFreq("");
+                            } else {
+                                int results = value[4] + (value[5] << 8) + (value[6] << 16) + (value[7] << 24);
+                                String freq = ibleModel.demical2Hex(results);
+                                String freqResult = freq.substring(0, 3) + "." + freq.substring(3);
+                                getBLEChannelSetting(packageDataIndex).setTxFreq(freqResult);
+                            }
 //                            results = value[8] + (value[9] << 8) + (value[10] << 16) + (value[11] << 24);
                             short ctcss = (short) ((short) (value[14] & 0xFF) + (((short) ((value[15] & 0xFF)) << 8)));
                             if (ctcss > 0x2800) {
@@ -359,21 +363,21 @@ public class BLEPresenter extends BaseMvpPresenter<BLEContracts.IBLEView> implem
                             getBLEChannelSetting(packageDataIndex).setTransmitPower(value[16] % 2);
                             getBLEChannelSetting(packageDataIndex).setBandwidth(value[16] >> 1);
                             getBLEChannelSetting(packageDataIndex).setScan(value[17] >> 1);
-                            ALog.eTag(TAG, "读取到的信道协议内容:%s",getBLEChannelSetting(packageDataIndex).toString());
+                            ALog.eTag(TAG, "读取到的信道协议内容:%s", getBLEChannelSetting(packageDataIndex).toString());
                         }
-                        ALog.dTag(TAG, "通知下位机第" + packageDataIndex + "个数据包接收成功");
+                        ALog.dTag(TAG, "通知下位机第 %s 个数据包接收成功", packageDataIndex);
                         sendData(UUIDWRITE, (byte) 0x06);
                     } else if (value[0] == (byte) 0x06) {
-                        Log.e("readData", "下位机知道了上位机第" + packageDataIndex + "个数据包接收成功");
+                        ALog.dTag("readData", "下位机知道了上位机第 %s 个数据包接收成功", packageDataIndex);
                         if (packageDataIndex < 32) {
                             packageDataIndex = packageDataIndex + 1;
                             short address = (short) ((packageDataIndex - 1) * 16);
                             readPublie[1] = (byte) (address >> 8);
                             readPublie[2] = (byte) address;
-                            Log.e(TAG, "开始请求第" + packageDataIndex + "个数据");
+                            ALog.dTag(TAG, "开始请求第 %s 个数据", packageDataIndex);
                             sendData(UUIDWRITE, readPublie);
                         } else {
-                            Log.e(TAG, "请求结束。共请求了" + packageDataIndex + "个数据包");
+                            ALog.dTag(TAG, "请求结束。共请求了 %s 个数据包", packageDataIndex);
                             packageDataIndex = 0;
                             sendData(UUIDWRITE, (byte) 0x45);
                             isDataWriting = false;

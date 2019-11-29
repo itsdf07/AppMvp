@@ -45,7 +45,7 @@ public class BLEModel implements BLEContracts.IBLEModel {
         for (int i = 1; i <= num; i++) {
             BLEChannelSetting bleChannelSetting = new BLEChannelSetting();
             bleChannelSetting.setChannelNum(i);
-            bleChannelSetting.setTxFreq("462.5625");
+            bleChannelSetting.setTxFreq("");
             bleChannelSetting.setCtcss("-1");
             bleChannelSetting.setTransmitPower(1);
             bleChannelSetting.setScan(0);
@@ -179,18 +179,25 @@ public class BLEModel implements BLEContracts.IBLEModel {
     private byte[] tx2Hex(String freq) {
         try {
             byte[] freq2Byte = new byte[4];
-            //TODO 这里可以考虑做下频段的范围限制
-            long l = new Double(Double.valueOf(Double.valueOf(freq).doubleValue() * 100000.0D).doubleValue()).longValue();
-            ALog.dTag("tx2Hex", "param:%s,l:%s", freq, l);
-            freq = l + "";
-            if (freq.length() != 8) {
-                ALog.eTag(TAG, "信道频率有误,param:%s", freq);
-                return null;
+            if ("".equals(freq.trim()) || freq == null) {
+                freq2Byte[0] = (byte) 0xFF;
+                freq2Byte[1] = (byte) 0xFF;
+                freq2Byte[2] = (byte) 0xFF;
+                freq2Byte[3] = (byte) 0xFF;
+            } else {
+                //TODO 这里可以考虑做下频段的范围限制
+                long l = new Double(Double.valueOf(Double.valueOf(freq).doubleValue() * 100000.0D).doubleValue()).longValue();
+                ALog.dTag("tx2Hex", "param:%s,l:%s", freq, l);
+                freq = l + "";
+                if (freq.length() != 8) {
+                    ALog.eTag(TAG, "信道频率有误,param:%s", freq);
+                    return null;
+                }
+                freq2Byte[0] = (byte) Integer.parseInt(freq.substring(6, 8), 16);
+                freq2Byte[1] = (byte) Integer.parseInt(freq.substring(4, 6), 16);
+                freq2Byte[2] = (byte) Integer.parseInt(freq.substring(2, 4), 16);
+                freq2Byte[3] = (byte) Integer.parseInt(freq.substring(0, 2), 16);
             }
-            freq2Byte[0] = (byte) Integer.parseInt(freq.substring(6, 8), 16);
-            freq2Byte[1] = (byte) Integer.parseInt(freq.substring(4, 6), 16);
-            freq2Byte[2] = (byte) Integer.parseInt(freq.substring(2, 4), 16);
-            freq2Byte[3] = (byte) Integer.parseInt(freq.substring(0, 2), 16);
             return freq2Byte;
         } catch (Exception e) {
             ALog.eTag(TAG, "e:%s", e);
