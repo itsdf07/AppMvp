@@ -20,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.PingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,7 @@
         <activity android:name=".deviceinfo.MobileInfoActivity" />
         <activity android:name=".nf877.ble.BLEScanActivity" />
         <activity android:name=".nf877.ble.BLEActivity" />
-        <activity android:name=".activity.PingActivity" />
+        <!--<activity android:name=".activity.PingActivity" />-->
         <activity android:name="com.itsdf07.lib.bt.ble.permission.PermissionUtils$PermissionActivity"/>
     </application>
 

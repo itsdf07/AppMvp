@@ -31,7 +31,7 @@ public class PingActivity extends BaseMvpActivity<PingPresenter> implements Ping
 
     @Override
     public void onAfterPresenter() {
-
+        autoPing();
     }
 
     @Override
@@ -91,4 +91,13 @@ public class PingActivity extends BaseMvpActivity<PingPresenter> implements Ping
         tvPingResultInfo.append("\n" + pingResult);
 
     }
+
+    private void autoPing() {
+        tvPingResultInfo.setText("");
+        int packageCount = Integer.parseInt(etPackageCount.getText().toString().trim());
+        int packageSize = Integer.parseInt(etPackageSize.getText().toString().trim());
+        int packageDelaytime = Integer.parseInt(etPackageDelaytime.getText().toString().trim());
+        presenter.onPingHost("", packageCount, packageSize, packageDelaytime);
+    }
+
 }
