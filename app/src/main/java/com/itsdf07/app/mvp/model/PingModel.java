@@ -1,6 +1,7 @@
 package com.itsdf07.app.mvp.model;
 
 import com.google.gson.Gson;
+import com.itsdf07.app.mvp.UrlGlobal;
 import com.itsdf07.app.mvp.bean.RespPingHostBean;
 import com.itsdf07.app.mvp.contracts.PingContracts;
 import com.itsdf07.lib.alog.ALog;
@@ -45,7 +46,7 @@ public class PingModel implements PingContracts.IPingModel {
 
     @Override
     public void getHosts(String group, final IHostsCallback callback) {
-        final String url = "http://192.168.2.130:8087/itsdf07/ping/hosts";
+        final String url = UrlGlobal.URL_PING_HOST + ":" + UrlGlobal.PORT_PING_HOST + "/ping/hosts";
         JSONObject root = new JSONObject();
         try {
             root.put("group", group);
@@ -120,7 +121,7 @@ public class PingModel implements PingContracts.IPingModel {
                 if (null != callback) {
                     callback.pingResultCallback(lineStr);
                 }
-                sleep(1 * 500);
+                sleep(delayTime * 100);
             }
             while ((lineStr = errorReader.readLine()) != null) {
                 ALog.eTag(TAG, "err result:%s", lineStr);
@@ -156,7 +157,7 @@ public class PingModel implements PingContracts.IPingModel {
 
     @Override
     public void addPingResults(HashMap<String, HashMap<String, String>> hostMaps) {
-        final String url = "http://192.168.2.130:8087/itsdf07/ping/addPingReuslt";
+        final String url = UrlGlobal.URL_PING_HOST + ":" + UrlGlobal.PORT_PING_HOST + "/ping/addPingReuslt";
         try {
             JSONObject root = new JSONObject();
             JSONArray datas = new JSONArray();
@@ -164,11 +165,12 @@ public class PingModel implements PingContracts.IPingModel {
             for (Map.Entry<String, HashMap<String, String>> map : hostMaps.entrySet()) {
                 JSONObject data = new JSONObject();
 
-                data.put("iccid", "123456");
-                data.put("imei", "654321");
-                data.put("provider", "Android");
-                data.put("os", "8.0");
-                data.put("netType", "4G");
+                data.put("iccid", "8986061910003732056H");
+                data.put("imei", "860588043009813");
+                data.put("provider", "1");
+                data.put("os", "1");
+                data.put("osVersion", "8.0");
+                data.put("netType", "4");
                 data.put("host", map.getValue().get("host"));
                 data.put("nextHost", map.getValue().get("nextHost"));
                 data.put("ip", map.getValue().get("ip"));

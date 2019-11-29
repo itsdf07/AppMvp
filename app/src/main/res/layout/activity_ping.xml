@@ -94,7 +94,7 @@
             android:id="@+id/et_host_group"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="TTS" />
+            android:text="" />
 
         <Button
             android:id="@+id/btn_ping_host"
