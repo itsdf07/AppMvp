@@ -38,9 +38,7 @@ public class PingModel implements PingContracts.IPingModel {
     private static final String IMEI_1 = "";//移动
     private static final String IMEI_2 = "866747000649326";//联通
     private static final String IMEI_3 = "861232031021032";//电信
-    private static final String OSVERSION_1 = "";//移动
-    private static final String OSVERSION_2 = "5.1.1-XinSJ";//联通
-    private static final String OSVERSION_3 = "5.1.1-SC2";//电信
+    private static final String PROVIDER = "3";//移动-1，联通-2，电信-3
 
     public interface IHostsCallback {
         void hostsResultCallback(List<RespPingHostBean.DatasBean> datas);
@@ -175,9 +173,9 @@ public class PingModel implements PingContracts.IPingModel {
             for (Map.Entry<String, HashMap<String, String>> map : hostMaps.entrySet()) {
                 JSONObject data = new JSONObject();
 
-                data.put("iccid", ICCID_3);
-                data.put("imei", IMEI_3);
-                data.put("provider", "2");
+                data.put("iccid", getICCID());
+                data.put("imei", getIMEI());
+                data.put("provider", PROVIDER);
                 data.put("os", "1");
                 data.put("osVersion", Tools2DeviceInfo.getInstance().getVersionRelease() + "-" + Tools2DeviceInfo.getInstance().getModel());
                 data.put("netType", "4");
@@ -213,6 +211,42 @@ public class PingModel implements PingContracts.IPingModel {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getIMEI() {
+        String imei = "";
+        switch (PROVIDER) {
+            case "1":
+                imei = IMEI_1;
+                break;
+            case "2":
+                imei = IMEI_2;
+                break;
+            case "3":
+                imei = IMEI_3;
+                break;
+            default:
+                break;
+        }
+        return imei;
+    }
+
+    private String getICCID() {
+        String iccid = "";
+        switch (PROVIDER) {
+            case "1":
+                iccid = ICCID_1;
+                break;
+            case "2":
+                iccid = ICCID_2;
+                break;
+            case "3":
+                iccid = ICCID_3;
+                break;
+            default:
+                break;
+        }
+        return iccid;
     }
 
 }
