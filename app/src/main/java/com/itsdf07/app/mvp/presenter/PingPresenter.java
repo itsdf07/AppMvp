@@ -26,12 +26,36 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
     PingContracts.IPingModel iPingModel;
 
     private HashMap<String, HashMap<String, String>> hostMaps = new HashMap<>();
+    private final static int MAXCOUNTDOWN = 80;
+    private int pingCountDown = MAXCOUNTDOWN ;//4小时
 
     private Handler mMainHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            String pingResult = (String) msg.obj;
-            getView().updateInfo(pingResult);
+            switch (msg.arg1) {
+                case 1:
+                    String pingResult = (String) msg.obj;
+                    getView().updateInfo(pingResult);
+                    break;
+                case 2:
+                    int pingCount = (int) msg.obj;
+                    getView().updatePingCountDown(pingCount);
+                    if (pingCount > 0) {
+                        Message msg1 = obtainMessage();
+                        msg1.obj = --pingCountDown;
+                        msg1.arg1 = 2;
+                        sendMessageDelayed(msg1, 1000);
+                    } else {
+                        pingCountDown = MAXCOUNTDOWN;
+                        onPingHost("", 4, 64, 1);
+                        removeCallbacksAndMessages(null);
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+
         }
     };
 
@@ -50,6 +74,7 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
                     public void pingResultCallback(final String pingResult) {
                         Message msg = mMainHandler.obtainMessage();
                         msg.obj = pingResult;
+                        msg.arg1 = 1;
                         msg.sendToTarget();
                     }
 
@@ -57,6 +82,7 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
                     public void pingResultErr(final String errResult) {
                         Message msg = mMainHandler.obtainMessage();
                         msg.obj = errResult;
+                        msg.arg1 = 1;
                         msg.sendToTarget();
                     }
 
@@ -138,6 +164,7 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
 
                         Message msg = mMainHandler.obtainMessage();
                         msg.obj = pingResult;
+                        msg.arg1 = 1;
                         msg.sendToTarget();
                     }
 
@@ -145,6 +172,7 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
                     public void pingResultErr(final String errResult) {
                         Message msg = mMainHandler.obtainMessage();
                         msg.obj = errResult;
+                        msg.arg1 = 1;
                         msg.sendToTarget();
                     }
 
@@ -155,8 +183,12 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
                             if (!hostMaps.isEmpty()) {
                                 onAddPingResults(hostMaps);
                             } else {
-                                android.os.Process.killProcess(android.os.Process.myPid());
+//                                android.os.Process.killProcess(android.os.Process.myPid());
                             }
+                            Message msg = mMainHandler.obtainMessage();
+                            msg.obj = --pingCountDown;
+                            msg.arg1 = 2;
+                            mMainHandler.sendMessageDelayed(msg, 1000);
                             return;
                         }
                         ping(packageCount, packageSize, delayTime, datas, nextIndex);

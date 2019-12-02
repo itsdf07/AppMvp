@@ -22,6 +22,13 @@ public interface PingContracts {
          * @param pingResult
          */
         void updateInfo(String pingResult);
+
+        /**
+         * 刷新倒计时
+         *
+         * @param countDown
+         */
+        void updatePingCountDown(int countDown);
     }
 
     interface IPingPresenter extends IBaseMvpPresenter {

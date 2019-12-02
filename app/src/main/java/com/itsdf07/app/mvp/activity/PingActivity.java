@@ -1,6 +1,7 @@
 package com.itsdf07.app.mvp.activity;
 
 import android.text.method.ScrollingMovementMethod;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +24,14 @@ public class PingActivity extends BaseMvpActivity<PingPresenter> implements Ping
     private EditText etPackageDelaytime;
     private EditText etHostGroup;
     private TextView tvPingResultInfo;
+    private TextView tvPingCountDown;
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        ALog.dTag(TAG, "keyCode:%s", keyCode);
+        return true;
+    }
 
     @Override
     public PingPresenter onInitPresenter() {
@@ -51,6 +60,7 @@ public class PingActivity extends BaseMvpActivity<PingPresenter> implements Ping
         etPackageSize = findViewById(R.id.et_package_size);
         etPackageDelaytime = findViewById(R.id.et_package_delaytime);
         etHostGroup = findViewById(R.id.et_host_group);
+        tvPingCountDown = findViewById(R.id.tv_ping_count_down);
         tvPingResultInfo = findViewById(R.id.tv_pingresult);
         tvPingResultInfo.setMovementMethod(ScrollingMovementMethod.getInstance());
         findViewById(R.id.btn_ping).setOnClickListener(new View.OnClickListener() {
@@ -89,11 +99,21 @@ public class PingActivity extends BaseMvpActivity<PingPresenter> implements Ping
     public void updateInfo(String pingResult) {
         ALog.dTag(TAG, "pingResult:%s", pingResult);
         tvPingResultInfo.append("\n" + pingResult);
+    }
 
+    @Override
+    public void updatePingCountDown(int countDown) {
+        ALog.dTag(TAG, "Ping倒计时:%s S", countDown);
+        if (countDown <= 0) {
+            tvPingCountDown.setText("Ping过程中，请等候...");
+        } else {
+            tvPingCountDown.setText("Ping倒计时:" + countDown + "s");
+        }
     }
 
     private void autoPing() {
         tvPingResultInfo.setText("");
+        updatePingCountDown(0);
         int packageCount = Integer.parseInt(etPackageCount.getText().toString().trim());
         int packageSize = Integer.parseInt(etPackageSize.getText().toString().trim());
         int packageDelaytime = Integer.parseInt(etPackageDelaytime.getText().toString().trim());
