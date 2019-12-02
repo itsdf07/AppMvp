@@ -26,8 +26,8 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
     PingContracts.IPingModel iPingModel;
 
     private HashMap<String, HashMap<String, String>> hostMaps = new HashMap<>();
-    private final static int MAXCOUNTDOWN = 80;
-    private int pingCountDown = MAXCOUNTDOWN ;//4小时
+    private final static int MAXCOUNTDOWN = 3600 * 4;
+    private int pingCountDown = MAXCOUNTDOWN;//4小时
 
     private Handler mMainHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -145,7 +145,8 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
                                     }
                                     ALog.eTag("HOST_IP", "prNextHost,%s,prIp:%s", bean.getPrNextHost(), bean.getPrIp());
                                     if ((!TextUtils.isEmpty(bean.getPrIp()) & bean.getPrIp().equals(ip))
-                                            && (!TextUtils.isEmpty(bean.getPrNextHost()) && bean.getPrNextHost().equals(nextHost))) {
+                                            && (!TextUtils.isEmpty(bean.getPrNextHost()) && bean.getPrNextHost().equals(nextHost))
+                                            && (!TextUtils.isEmpty(bean.getPrProvider()) && bean.getPrProvider().equals(PingModel.PROVIDER))) {
                                         isNew = false;
                                         break;
                                     }

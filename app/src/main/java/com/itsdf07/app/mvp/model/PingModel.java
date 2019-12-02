@@ -38,7 +38,7 @@ public class PingModel implements PingContracts.IPingModel {
     private static final String IMEI_1 = "";//移动
     private static final String IMEI_2 = "866747000649326";//联通
     private static final String IMEI_3 = "861232031021032";//电信
-    private static final String PROVIDER = "3";//移动-1，联通-2，电信-3
+    public static final String PROVIDER = "2";//移动-1，联通-2，电信-3
 
     public interface IHostsCallback {
         void hostsResultCallback(List<RespPingHostBean.DatasBean> datas);
