@@ -34,13 +34,13 @@ public class PingModel implements PingContracts.IPingModel {
     private static final String TAG = "PingModel";
     private static final String ICCID_1 = "";//移动
     private static final String ICCID_2 = "8986061910003732056H";//联通
-    private static final String ICCID_3 = "";//电信
+    private static final String ICCID_3 = "8986111922503225948XQ";//电信
     private static final String IMEI_1 = "";//移动
     private static final String IMEI_2 = "866747000649326";//联通
-    private static final String IMEI_3 = "";//电信
+    private static final String IMEI_3 = "861232031021032";//电信
     private static final String OSVERSION_1 = "";//移动
     private static final String OSVERSION_2 = "5.1.1-XinSJ";//联通
-    private static final String OSVERSION_3 = "";//电信
+    private static final String OSVERSION_3 = "5.1.1-SC2";//电信
 
     public interface IHostsCallback {
         void hostsResultCallback(List<RespPingHostBean.DatasBean> datas);
@@ -175,8 +175,8 @@ public class PingModel implements PingContracts.IPingModel {
             for (Map.Entry<String, HashMap<String, String>> map : hostMaps.entrySet()) {
                 JSONObject data = new JSONObject();
 
-                data.put("iccid", ICCID_2);
-                data.put("imei", IMEI_2);
+                data.put("iccid", ICCID_3);
+                data.put("imei", IMEI_3);
                 data.put("provider", "2");
                 data.put("os", "1");
                 data.put("osVersion", Tools2DeviceInfo.getInstance().getVersionRelease() + "-" + Tools2DeviceInfo.getInstance().getModel());
