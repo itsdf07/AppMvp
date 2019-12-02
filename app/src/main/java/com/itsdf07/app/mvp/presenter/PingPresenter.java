@@ -26,7 +26,7 @@ public class PingPresenter extends BaseMvpPresenter<PingContracts.IPingView> imp
     PingContracts.IPingModel iPingModel;
 
     private HashMap<String, HashMap<String, String>> hostMaps = new HashMap<>();
-    private final static int MAXCOUNTDOWN = 3600 * 4;
+    private final static int MAXCOUNTDOWN = 80;
     private int pingCountDown = MAXCOUNTDOWN;//4小时
 
     private Handler mMainHandler = new Handler(Looper.getMainLooper()) {
